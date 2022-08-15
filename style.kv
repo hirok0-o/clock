@@ -1,0 +1,103 @@
+#: import NoTransition kivy.uix.screenmanager.NoTransition
+W:
+    StartUp:
+    MainWindow:
+    SecondWindow:
+
+
+
+<LabeledRadioButton>:
+    rows:2
+    Label:
+        id: label
+        text: root.text
+    CheckBox:
+        group: 'meaningful group name here'
+        on_active: if self.active: root.changeTime(label.text)
+        active: True if label.text=='London' else False
+        allow_no_selection: False
+
+<ToggleButton>
+    font_size: root.width/6
+
+
+<StartUp>
+    Button:
+        text:'Start'
+        on_press:
+            app.root.current='main'
+            root.manager.transition = NoTransition()
+
+
+<MainWindow>
+    name: 'main'
+    FloatLayout:
+        #make the background blue
+        canvas:
+            Color:
+                rgb: 0.2, 0.2, 0.3
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        size: root.size
+        Label:
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            id: time_label
+            text: ""
+            font: "Roboto"
+            font_size: root.width/4
+        GridLayout:
+            id: countries
+            cols: 10
+            pos_hint: {'center_x': 0.5, 'y': 0.1}
+            size_hint: 0.8, 0.1
+        Button:
+            id: s
+            text:'s'
+            pos_hint: {'center_x': 0.5, 'y': 0.9}
+            size_hint: 0.5, 0.1
+            on_press: 
+                root.changeWindowSize()
+                app.root.current = 'setts' 
+                root.manager.transition = NoTransition()
+
+<SecondWindow>
+    name: 'setts'
+    GridLayout:
+        cols: 1
+        rows: 2
+        GridLayout:
+            id: countries
+            cols:8
+            ToggleButton:
+                id: NY
+                text:'New York'
+            ToggleButton:
+                id: LA
+                text:'Los Angeles'
+            ToggleButton:
+                id: LON
+                text:'London'
+                state: 'down'
+                disabled: True
+            ToggleButton:
+                id: PAR
+                text:'Paris'
+            ToggleButton:
+                id: ROM
+                text:'Rome'
+            ToggleButton:
+                id: SYD
+                text:'Sydney'
+            ToggleButton:
+                id: TOK
+                text:'Tokyo'
+            ToggleButton:
+                id: UAE
+                text:'United Arab\nEmirates'
+        Button:
+            text: 'Back'
+            on_press:
+                root.changeWindowSize()
+                app.root.current='main'
+                root.manager.transition = NoTransition()
