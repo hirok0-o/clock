@@ -4,7 +4,7 @@ from tkinter import Label
 
 import kivy
 from kivy.app import App
-from kivy.clock import Clock
+from kivy.clock import Clock, mainthread
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.uix.button import Button
@@ -37,20 +37,24 @@ conts = {'New York': -4, 'Los Angeles': -7, 'London': 1, 'Rome': 2,
 
 
 class MainWindow(Screen):
-
+    
     def updateTime(self):
-        global adder, prev, curr
+        
         while True:
             timeString = time.gmtime()
             timeString = f"{(timeString.tm_hour+adder)%24:02d}:{timeString.tm_min:02d}:{timeString.tm_sec:02d}"
             self.ids.time_label.text = timeString
             time.sleep(.1)
-            prev, curr = curr, Window.size
-            if prev != curr:
-                if curr[0] < 755 or curr[1] < 312:
+    
+    @mainthread
+    def changeWindowCondition(self, *args):
+        global adder, prev, curr
+        prev, curr = curr, Window.size
+        if prev != curr:
+            if curr[0] < 755 or curr[1] < 312:
                     if self.ids.countries.children:
                         self.ids.countries.clear_widgets()
-                else:
+            else:
                     if len(self.ids.countries.children) == 0:
                         self.on_enter()
 
